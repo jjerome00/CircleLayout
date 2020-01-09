@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CircleLayout</string>
+    <string name="less">less</string>
+    <string name="more">more</string>
 </resources>
