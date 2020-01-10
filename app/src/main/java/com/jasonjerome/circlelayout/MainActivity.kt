@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jasonjerome.circlelayout.util.RandomColors
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.round_image.view.*
+import kotlinx.android.synthetic.main.text_item.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,29 +18,52 @@ class MainActivity : AppCompatActivity() {
         circleLayout.sectionLayout = R.layout.round_image
 
         lessButton.setOnClickListener {
-            setCircleSections(circleLayout.sectionCount - 1)
+            setSections(circleLayout.sectionCount - 1)
         }
 
         moreButton.setOnClickListener {
-            setCircleSections(circleLayout.sectionCount + 1)
+            setSections(circleLayout.sectionCount + 1)
         }
 
-        setCircleColors()
+        changeLayout.setOnClickListener {
+            switchLayout()
+        }
+
+        updateColors()
     }
 
-    private fun setCircleColors() {
-        circleLayout.sectionList.forEach { view ->
-            val tag = view.tag
-            if (tag == null) {
-                view.image_id.setBackgroundColor(randomColors.color)
+    private fun switchLayout() {
+        circleLayout.sectionLayout = if (circleLayout.sectionLayout == R.layout.text_item) {
+            R.layout.round_image
+        } else {
+            R.layout.text_item
+        }
+        updateColors()
+    }
+
+    private fun updateColors() {
+        circleLayout.sectionList.forEachIndexed { index, view ->
+            // a cheap way of keeping colors for views that haven't been removed
+            if (view.tag == null) {
+                val color = randomColors.color
+                when (circleLayout.sectionLayout) {
+                    R.layout.text_item -> {
+                        view.textId.setBackgroundColor(color)
+                        val label = "${index + 1}"
+                        view.textId.text = label
+                    }
+                    R.layout.round_image -> {
+                        view.imageId.setBackgroundColor(color)
+                    }
+                }
                 view.tag = true
             }
         }
     }
 
-    private fun setCircleSections(newSectionCount: Int) {
+    private fun setSections(newSectionCount: Int) {
         circleLayout.sectionCount = newSectionCount
-        setCircleColors()
+        updateColors()
     }
 
 }
