@@ -1,45 +1,112 @@
 package com.jasonjerome.circlelayout
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.ibm.icu.text.RuleBasedNumberFormat
 import com.jasonjerome.circlelayout.util.RandomColors
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.round_image.view.*
+import kotlinx.android.synthetic.main.text_item.view.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val randomColors = RandomColors()
+    private lateinit var aboutView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        aboutView = findViewById(R.id.CircularIconCenter)
         circleLayout.sectionLayout = R.layout.round_image
-
-        lessButton.setOnClickListener {
-            setCircleSections(circleLayout.sectionCount - 1)
-        }
-
-        moreButton.setOnClickListener {
-            setCircleSections(circleLayout.sectionCount + 1)
-        }
-
-        setCircleColors()
+        setupClickListeners()
+        updateViewContents()
     }
 
-    private fun setCircleColors() {
-        circleLayout.sectionList.forEach { view ->
-            val tag = view.tag
-            if (tag == null) {
-                view.image_id.setBackgroundColor(randomColors.color)
+    private fun switchLayout() {
+        circleLayout.sectionLayout = if (circleLayout.sectionLayout == R.layout.text_item) {
+            R.layout.round_image
+        } else {
+            R.layout.text_item
+        }
+        aboutView = findViewById(R.id.CircularIconCenter)
+        updateViewContents()
+    }
+
+    private fun setSections(newSectionCount: Int) {
+        circleLayout.sectionCount = newSectionCount
+        updateViewContents()
+    }
+
+    /**
+     * Update the chosen view with colors/images/text.
+     * It's not really relevant to the demo.
+     */
+    private fun updateViewContents() {
+        circleLayout.sectionList.forEachIndexed { index, view ->
+            // I use the tag as a cheap way of keeping track of which views that have not been set yet.
+            if (view.tag == null) {
+                val color = randomColors.color
+                when (circleLayout.sectionLayout) {
+                    R.layout.text_item -> {
+                        view.textId.text = (index + 1).asWord
+                        view.textId.setTextColor(color)
+                    }
+                    R.layout.round_image -> {
+                        view.imageId.setImageDrawable(this.resources.getDrawable(R.drawable.ic_face, this.theme))
+                        view.imageId.setColorFilter(color)
+                    }
+                }
                 view.tag = true
             }
         }
     }
 
-    private fun setCircleSections(newSectionCount: Int) {
-        circleLayout.sectionCount = newSectionCount
-        setCircleColors()
+    /**
+     * Fun way to show a number as a word
+     */
+    private val Int.asWord: String
+        get() = this.let {
+            var result = this.toString()
+            try {
+                val locale = Locale(Locale.getDefault().toLanguageTag(), Locale.getDefault().country)
+                val ruleBasedNumberFormat = RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT)
+                result = ruleBasedNumberFormat.format(this)
+            } catch (e: Exception) {
+                Log.e(this.javaClass.simpleName, "error: $e")
+            }
+            result
+        }
+
+    private fun setupClickListeners() {
+        lessButton.setOnClickListener {
+            setSections(circleLayout.sectionCount - 1)
+        }
+
+        moreButton.setOnClickListener {
+            setSections(circleLayout.sectionCount + 1)
+        }
+
+        changeLayout.setOnClickListener {
+            switchLayout()
+        }
+
+        aboutButton.setOnClickListener {
+            aboutView.visibility = if (aboutView.visibility != View.VISIBLE) View.VISIBLE else View.INVISIBLE
+        }
+
+        aboutView.setOnClickListener {
+            //Toast.makeText(this, "hi!", Toast.LENGTH_LONG).show()
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.jjerome.com"))
+            startActivity(intent)
+        }
     }
 
 }

@@ -38,6 +38,9 @@ class CircularIconLayout : ConstraintLayout {
     @LayoutRes
     var sectionLayout: Int = R.layout.round_image
         set(value) {
+            if (value != field) {
+                setupInitialView()
+            }
             field = value
             setupIconRestraints()
         }
@@ -45,14 +48,7 @@ class CircularIconLayout : ConstraintLayout {
     private fun init(attrs: AttributeSet?) {
         var requestedSectionCount = MIN_SECTIONS
 
-        // "center view" - all views will be constrained to this one.
-        centerView = TextView(context).apply {
-            id = R.id.CircularIconCenter
-            layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            visibility = View.INVISIBLE
-            text = "*"
-        }
-        this.addView(centerView)
+        setupInitialView()
 
         attrs?.let {
             val styleValues = context.obtainStyledAttributes(it, R.styleable.CircularIconLayout, 0, 0)
@@ -62,6 +58,21 @@ class CircularIconLayout : ConstraintLayout {
         }
 
         sectionCount = requestedSectionCount
+    }
+
+    private fun setupInitialView() {
+        sectionList.clear()
+        this.removeAllViews()
+
+        // "center view" - all views will be constrained to this one.
+        centerView = TextView(context).apply {
+            id = R.id.CircularIconCenter
+            layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            visibility = View.INVISIBLE
+            text = context.resources.getText(R.string.about)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+        }
+        this.addView(centerView)
     }
 
     /**

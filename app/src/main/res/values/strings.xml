@@ -2,4 +2,7 @@
     <string name="app_name">CircleLayout</string>
     <string name="less">less</string>
     <string name="more">more</string>
+    <string name="change_layout">Change Layout</string>
+    <string name="about">Demo By\nJason\nJerome</string>
+    <string name="aboutLabel">about</string>
 </resources>

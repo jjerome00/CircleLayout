@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="defaultRoundImageColor">@android:color/darker_gray</color>
+    <color name="defaultRoundImageColor">@android:color/transparent</color>
 </resources>
