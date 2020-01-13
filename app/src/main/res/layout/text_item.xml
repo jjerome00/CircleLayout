@@ -12,7 +12,9 @@
         android:layout_height="45dp"
         android:background="@color/defaultRoundImageColor"
         android:gravity="center"
-        android:textColor="@android:color/white"
-        tools:text="1" />
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="One" />
 
 </LinearLayout>
