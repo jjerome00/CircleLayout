@@ -1,38 +1,31 @@
 package com.jasonjerome.circlelayout
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.ibm.icu.text.RuleBasedNumberFormat
 import com.jasonjerome.circlelayout.util.RandomColors
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.round_image.view.*
 import kotlinx.android.synthetic.main.text_item.view.*
-import java.lang.Exception
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val randomColors = RandomColors()
+    private lateinit var aboutView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        aboutView = findViewById(R.id.CircularIconCenter)
         circleLayout.sectionLayout = R.layout.round_image
-
-        lessButton.setOnClickListener {
-            setSections(circleLayout.sectionCount - 1)
-        }
-
-        moreButton.setOnClickListener {
-            setSections(circleLayout.sectionCount + 1)
-        }
-
-        changeLayout.setOnClickListener {
-            switchLayout()
-        }
-
+        setupClickListeners()
         updateViewContents()
     }
 
@@ -42,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             R.layout.text_item
         }
+        aboutView = findViewById(R.id.CircularIconCenter)
         updateViewContents()
     }
 
@@ -61,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 val color = randomColors.color
                 when (circleLayout.sectionLayout) {
                     R.layout.text_item -> {
-                        view.textId.text = (index+1).asWord
+                        view.textId.text = (index + 1).asWord
                         view.textId.setTextColor(color)
                     }
                     R.layout.round_image -> {
@@ -89,5 +83,30 @@ class MainActivity : AppCompatActivity() {
             }
             result
         }
+
+    private fun setupClickListeners() {
+        lessButton.setOnClickListener {
+            setSections(circleLayout.sectionCount - 1)
+        }
+
+        moreButton.setOnClickListener {
+            setSections(circleLayout.sectionCount + 1)
+        }
+
+        changeLayout.setOnClickListener {
+            switchLayout()
+        }
+
+        aboutButton.setOnClickListener {
+            aboutView.visibility = if (aboutView.visibility != View.VISIBLE) View.VISIBLE else View.INVISIBLE
+        }
+
+        aboutView.setOnClickListener {
+            //Toast.makeText(this, "hi!", Toast.LENGTH_LONG).show()
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.jjerome.com"))
+            startActivity(intent)
+        }
+    }
 
 }

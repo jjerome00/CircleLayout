@@ -69,7 +69,8 @@ class CircularIconLayout : ConstraintLayout {
             id = R.id.CircularIconCenter
             layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             visibility = View.INVISIBLE
-            text = "*"
+            text = context.resources.getText(R.string.about)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         this.addView(centerView)
     }
