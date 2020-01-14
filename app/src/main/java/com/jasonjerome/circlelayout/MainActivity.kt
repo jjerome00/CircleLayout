@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.ibm.icu.text.RuleBasedNumberFormat
@@ -97,13 +96,7 @@ class MainActivity : AppCompatActivity() {
             switchLayout()
         }
 
-        aboutButton.setOnClickListener {
-            aboutView.visibility = if (aboutView.visibility != View.VISIBLE) View.VISIBLE else View.INVISIBLE
-        }
-
         aboutView.setOnClickListener {
-            //Toast.makeText(this, "hi!", Toast.LENGTH_LONG).show()
-
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.jjerome.com"))
             startActivity(intent)
         }

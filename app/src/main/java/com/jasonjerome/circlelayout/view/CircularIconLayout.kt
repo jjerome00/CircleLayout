@@ -68,7 +68,7 @@ class CircularIconLayout : ConstraintLayout {
         centerView = TextView(context).apply {
             id = R.id.CircularIconCenter
             layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            visibility = View.INVISIBLE
+            visibility = View.VISIBLE
             text = context.resources.getText(R.string.about)
             textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
@@ -125,6 +125,7 @@ class CircularIconLayout : ConstraintLayout {
         constraintSet.connect(centerView.id, ConstraintSet.START, this.id, ConstraintSet.START)
         constraintSet.connect(centerView.id, ConstraintSet.END, this.id, ConstraintSet.END)
 
+        // calculate where to place each view surrounding the center
         val distanceFromCenter = circleRadius.toDensityPixels()
         val segmentDegrees: Float = 360.0f / sectionCount.toFloat()
         var angle: Float = segmentDegrees / 2.0f
